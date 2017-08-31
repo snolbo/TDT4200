@@ -1,10 +1,13 @@
 // preprocessor commands
 #include <stdio.h>
 #include <stdlib.h>
+#include "mpi.h"
 
 
 // compiling from terminal: gcc <filename>.c (optional) -o <desiredExecutableName>
 // <desiredExecutableName> ( to run .exe)
+
+// segmentation fault: tried to access memory that was not yours.. Shame on you
 
 //prototypes, compilers must know this. Implementation irrelevant
 double addTwo(int a, double b);
