@@ -11,7 +11,7 @@ SHELL := /bin/bash
 
 # In this case the dependencies are easy to figure out, so I will not elaborate further
 all : $(objects)
-	gcc $(objects) -o myProgram
+	gcc $(objects) -o julia -lm
 
 # In this target [stuff I need to make this target] is two other targets, namely clean and all
 # This command simply runs the clean target, then the all target, thus recompiling everything.
@@ -25,6 +25,6 @@ clean :
 	rm -f *.o && rm -f *.gch
 
 # Finally, the test target. Builds the 'all' target, then runs the test script on the output
-.PHONY : test
-test : all
-	./test.sh myProgram
+#.PHONY : test
+#test : all
+#	./test.sh myProgram

@@ -89,6 +89,13 @@ void calculate(complex_t julia_C) {
 
 
 int main(int argc,char **argv) {
+/*
+	printf("\n The number of arguments= %d \n", argc );
+	for(int i = 0; i < argc; i++){
+		printf("\n %s", argv[i]);
+	}
+return 0;
+*/
 	if(argc==1) {
 		puts("Usage: JULIA\n");
 		puts("Input real and imaginary part. ex: ./julia 0.0 -0.8");

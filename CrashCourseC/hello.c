@@ -1,7 +1,7 @@
 // preprocessor commands
 #include <stdio.h>
 #include <stdlib.h>
-#include "mpi.h"
+#include <mpi.h>
 
 
 // compiling from terminal: gcc <filename>.c (optional) -o <desiredExecutableName>
@@ -90,7 +90,7 @@ int main(int argc, char* argv[]){
   fillArray(someInts, length); // arrays are really passed with the pointer to first element
   printf("The array constains: ");
   for(int i = 0; i < length; i++){
-    printf("%d ", someInts );
+    printf("%d ", *someInts );
   }
   printf("\n");
 

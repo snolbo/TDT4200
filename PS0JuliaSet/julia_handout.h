@@ -9,6 +9,7 @@
 #define XSIZE 2560
 #define YSIZE 2048
 
+
 #define MAXITER 255
 
 // note that we are extra careful with preprocessor macros. Adding parenthesises is never the
