@@ -1,0 +1,109 @@
+mpicc collective.o -o collective
+[compute-1-0-1:51621] *** Process received signal ***
+[compute-1-0-1:51623] *** Process received signal ***
+[compute-1-0-1:51623] Signal: Segmentation fault (11)
+[compute-1-0-1:51623] Signal code: Address not mapped (1)
+[compute-1-0-1:51623] Failing at address: 0x44000098
+[compute-1-0-1:51621] Signal: Segmentation fault (11)
+[compute-1-0-1:51621] Signal code: Address not mapped (1)
+[compute-1-0-1:51621] Failing at address: 0x44000098
+[compute-1-0-1:51619] *** Process received signal ***
+[compute-1-0-1:51619] Signal: Segmentation fault (11)
+[compute-1-0-1:51619] Signal code: Address not mapped (1)
+[compute-1-0-1:51619] Failing at address: 0x44000098
+[compute-1-0-1:51620] *** Process received signal ***
+[compute-1-0-1:51622] *** Process received signal ***
+[compute-1-0-1:51620] Signal: Segmentation fault (11)
+[compute-1-0-1:51620] Signal code: Address not mapped (1)
+[compute-1-0-1:51620] Failing at address: 0x44000098
+[compute-1-0-1:51622] Signal: Segmentation fault (11)
+[compute-1-0-1:51622] Signal code: Address not mapped (1)
+[compute-1-0-1:51622] Failing at address: 0x44000098
+[compute-1-0-1:51621] [ 0] [compute-1-0-1:51619] [ 0] [compute-1-0-1:51623] [ 0] /usr/lib64/libc.so.6(+0x35250)[0x2b6a7591f250]
+[compute-1-0-1:51621] [ 1] /usr/lib64/libc.so.6(+0x35250)[0x2b7221871250]
+[compute-1-0-1:51619] [ 1] /usr/lib64/libc.so.6(+0x35250)[0x2b03270f2250]
+[compute-1-0-1:51623] [ 1] [compute-1-0-1:51622] [ 0] [compute-1-0-1:51620] [ 0] /share/apps/software/Compiler/GCC/6.3.0-2.27/OpenMPI/2.0.2/lib/libmpi.so.20(MPI_Comm_rank+0x42)[0x2b0326f29112]
+[compute-1-0-1:51623] [ 2] ./collective[0x400b24]
+[compute-1-0-1:51623] [ 3] /share/apps/software/Compiler/GCC/6.3.0-2.27/OpenMPI/2.0.2/lib/libmpi.so.20(MPI_Comm_rank+0x42)[0x2b72216a8112]
+[compute-1-0-1:51619] [ 2] ./collective[0x400b24]
+[compute-1-0-1:51619] [ 3] /share/apps/software/Compiler/GCC/6.3.0-2.27/OpenMPI/2.0.2/lib/libmpi.so.20(MPI_Comm_rank+0x42)[0x2b6a75756112]
+[compute-1-0-1:51621] [ 2] ./collective[0x400b24]
+[compute-1-0-1:51621] [ 3] /usr/lib64/libc.so.6(+0x35250)[0x2ba7c0224250]
+[compute-1-0-1:51620] [ 1] /usr/lib64/libc.so.6(__libc_start_main+0xf5)[0x2b03270deb35]
+[compute-1-0-1:51623] [ 4] ./collective[0x400a19]
+[compute-1-0-1:51623] *** End of error message ***
+/usr/lib64/libc.so.6(+0x35250)[0x2b48d8822250]
+[compute-1-0-1:51622] [ 1] /usr/lib64/libc.so.6(__libc_start_main+0xf5)[0x2b722185db35]
+[compute-1-0-1:51619] [ 4] ./collective[0x400a19]
+[compute-1-0-1:51619] *** End of error message ***
+/usr/lib64/libc.so.6(__libc_start_main+0xf5)[0x2b6a7590bb35]
+[compute-1-0-1:51621] [ 4] ./collective[0x400a19]
+[compute-1-0-1:51621] *** End of error message ***
+/share/apps/software/Compiler/GCC/6.3.0-2.27/OpenMPI/2.0.2/lib/libmpi.so.20(MPI_Comm_rank+0x42)[0x2ba7c005b112]
+[compute-1-0-1:51620] [ 2] ./collective[0x400b24]
+[compute-1-0-1:51620] [ 3] /share/apps/software/Compiler/GCC/6.3.0-2.27/OpenMPI/2.0.2/lib/libmpi.so.20(MPI_Comm_rank+0x42)[0x2b48d8659112]
+[compute-1-0-1:51622] [ 2] ./collective[0x400b24]
+[compute-1-0-1:51622] [ 3] /usr/lib64/libc.so.6(__libc_start_main+0xf5)[0x2b48d880eb35]
+[compute-1-0-1:51622] [ 4] ./collective[0x400a19]
+[compute-1-0-1:51622] *** End of error message ***
+/usr/lib64/libc.so.6(__libc_start_main+0xf5)[0x2ba7c0210b35]
+[compute-1-0-1:51620] [ 4] ./collective[0x400a19]
+[compute-1-0-1:51620] *** End of error message ***
+[compute-1-0-2:60455] *** Process received signal ***
+[compute-1-0-2:60457] *** Process received signal ***
+[compute-1-0-2:60457] Signal: Segmentation fault (11)
+[compute-1-0-2:60457] Signal code: Address not mapped (1)
+[compute-1-0-2:60457] Failing at address: 0x44000098
+[compute-1-0-2:60456] *** Process received signal ***
+[compute-1-0-2:60456] Signal: Segmentation fault (11)
+[compute-1-0-2:60456] Signal code: Address not mapped (1)
+[compute-1-0-2:60456] Failing at address: 0x44000098
+[compute-1-0-2:60455] Signal: Segmentation fault (11)
+[compute-1-0-2:60455] Signal code: Address not mapped (1)
+[compute-1-0-2:60455] Failing at address: 0x44000098
+[compute-1-0-2:60458] *** Process received signal ***
+[compute-1-0-2:60458] Signal: Segmentation fault (11)
+[compute-1-0-2:60458] Signal code: Address not mapped (1)
+[compute-1-0-2:60458] Failing at address: 0x44000098
+[compute-1-0-2:60459] *** Process received signal ***
+[compute-1-0-2:60459] Signal: Segmentation fault (11)
+[compute-1-0-2:60459] Signal code: Address not mapped (1)
+[compute-1-0-2:60459] Failing at address: 0x44000098
+[compute-1-0-2:60457] [ 0] /usr/lib64/libc.so.6(+0x35250)[0x2b6e171ce250]
+[compute-1-0-2:60457] [ 1] [compute-1-0-2:60456] [ 0] /usr/lib64/libc.so.6(+0x35250)[0x2b85da793250]
+[compute-1-0-2:60456] [ 1] [compute-1-0-2:60455] [ 0] /usr/lib64/libc.so.6(+0x35250)[0x2b8622a26250]
+[compute-1-0-2:60455] [ 1] [compute-1-0-2:60458] [ 0] /usr/lib64/libc.so.6(+0x35250)[0x2b6129dac250]
+[compute-1-0-2:60458] [ 1] [compute-1-0-2:60459] [ 0] /usr/lib64/libc.so.6(+0x35250)[0x2aba7cead250]
+[compute-1-0-2:60459] [ 1] /share/apps/software/Compiler/GCC/6.3.0-2.27/OpenMPI/2.0.2/lib/libmpi.so.20(MPI_Comm_rank+0x42)[0x2aba7cce4112]
+[compute-1-0-2:60459] [ 2] /share/apps/software/Compiler/GCC/6.3.0-2.27/OpenMPI/2.0.2/lib/libmpi.so.20(MPI_Comm_rank+0x42)[0x2b6129be3112]
+[compute-1-0-2:60458] [ 2] ./collective[0x400b24]
+[compute-1-0-2:60458] [ 3] /usr/lib64/libc.so.6(__libc_start_main+0xf5)[0x2b6129d98b35]
+[compute-1-0-2:60458] [ 4] ./collective[0x400a19]
+[compute-1-0-2:60458] *** End of error message ***
+/share/apps/software/Compiler/GCC/6.3.0-2.27/OpenMPI/2.0.2/lib/libmpi.so.20(MPI_Comm_rank+0x42)[0x2b6e17005112]
+[compute-1-0-2:60457] [ 2] ./collective[0x400b24]
+[compute-1-0-2:60457] [ 3] /usr/lib64/libc.so.6(__libc_start_main+0xf5)[0x2b6e171bab35]
+[compute-1-0-2:60457] [ 4] ./collective[0x400a19]
+[compute-1-0-2:60457] *** End of error message ***
+/share/apps/software/Compiler/GCC/6.3.0-2.27/OpenMPI/2.0.2/lib/libmpi.so.20(MPI_Comm_rank+0x42)[0x2b85da5ca112]
+[compute-1-0-2:60456] [ 2] ./collective[0x400b24]
+[compute-1-0-2:60456] [ 3] /usr/lib64/libc.so.6(__libc_start_main+0xf5)[0x2b85da77fb35]
+[compute-1-0-2:60456] [ 4] ./collective[0x400a19]
+[compute-1-0-2:60456] *** End of error message ***
+/share/apps/software/Compiler/GCC/6.3.0-2.27/OpenMPI/2.0.2/lib/libmpi.so.20(MPI_Comm_rank+0x42)[0x2b862285d112]
+[compute-1-0-2:60455] [ 2] ./collective[0x400b24]
+[compute-1-0-2:60455] [ 3] /usr/lib64/libc.so.6(__libc_start_main+0xf5)[0x2b8622a12b35]
+[compute-1-0-2:60455] [ 4] ./collective[0x400a19]
+[compute-1-0-2:60455] *** End of error message ***
+./collective[0x400b24]
+[compute-1-0-2:60459] [ 3] /usr/lib64/libc.so.6(__libc_start_main+0xf5)[0x2aba7ce99b35]
+[compute-1-0-2:60459] [ 4] ./collective[0x400a19]
+[compute-1-0-2:60459] *** End of error message ***
+--------------------------------------------------------------------------
+mpirun noticed that process rank 8 with PID 60458 on node compute-1-0-2 exited on signal 11 (Segmentation fault).
+--------------------------------------------------------------------------
+
+real	0m1.517s
+user	0m0.188s
+sys	0m0.284s
+Linux compute-1-0-1.foreman.hpc.ntnu.no 3.10.0-514.26.2.el7.x86_64 #1 SMP Tue Jul 4 15:04:05 UTC 2017 x86_64 x86_64 x86_64 GNU/Linux
