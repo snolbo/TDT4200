@@ -28,7 +28,3 @@ clean :
 #.PHONY : test
 #test : all
 #	./test.sh myProgram
-
-.PHONY : runtest
-runtest : all
-	mpirun -n 10 ./collective
