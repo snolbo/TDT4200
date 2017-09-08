@@ -79,7 +79,7 @@ void calculate(complex_t julia_C) {
         // escape, or until we've reached MAXITER
 
         // z = z squared + C
-				z = square_complex(z) + julia_C; // ??????????????
+				z = add_complex(square_complex(z), julia_C); // ??????????????
 				if(++iter==MAXITER) break;
 			}
 			pixel[PIXEL(i,j)]=iter;
