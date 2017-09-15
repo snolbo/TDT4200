@@ -80,7 +80,7 @@ void calculate(complex_t julia_C, int rank, int workingProcessors) {
 		//  printf("Sending line nr: %d from process %d\n", row, rank);
 		 MPI_Send(rowData, XSIZE, MPI_INT, 0, 1, MPI_COMM_WORLD); // sending one row of results, BLOCKING!! // save results and send collected or send each row?
 	}
-	printf("Process %d sent all lines. Lines Processed: %d \n", rank, lines2Process);
+	//printf("Process %d sent all lines. Lines Processed: %d \n", rank, lines2Process);
 }
 
 
@@ -162,6 +162,4 @@ int main(int argc,char **argv) {
 		calculate(julia_C, rank, workingProcessors);
 		MPI_Barrier(MPI_COMM_WORLD);
 	} // END WORKERr
-
-	printf("rank: %d time: %lf\n", rank, endtime -starttime);
 }

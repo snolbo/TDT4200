@@ -14,4 +14,4 @@
 module load GCC
 module load OpenMPI
 make
-mpirun -np 4 ./julia_mpi -0.162 1.04
+mpirun -np 4 ./julia_mpi -0.0 0.0
