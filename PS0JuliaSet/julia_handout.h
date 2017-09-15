@@ -5,9 +5,10 @@
 #include <stdlib.h>
 #include <math.h>
 #include "bitmap.h"
+#include <sys/time.h>
 
-#define XSIZE 2560
-#define YSIZE 2048
+#define XSIZE 900
+#define YSIZE 1000
 
 
 #define MAXITER 255
@@ -29,5 +30,7 @@ complex_t add_complex(complex_t a, complex_t b);
 complex_t add_real(complex_t a, int b);
 complex_t add_imag(complex_t a, int b);
 double absolute_value(complex_t a);
+
+double walltime();
 
 #endif

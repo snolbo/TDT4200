@@ -12,8 +12,6 @@ double ylower;
 double ycenter=1e-6;
 double step;
 
-
-
 // I suggest you implement these, however you can do fine without them if you'd rather operate
 // on your complex number directly.
 complex_t square_complex(complex_t c){
@@ -50,43 +48,44 @@ double absolute_value(complex_t a) {
 	return sqrt(pow(a.real, 2) + pow(a.imag, 2));
 }
 
+
+
 // add julia_c input arg here?
 void calculate(complex_t julia_C, int rank, int workingProcessors) {
 	int lines2Process = (int) floor(YSIZE / workingProcessors);
 	int remainder = YSIZE % workingProcessors;
-	if(rank < remainder){ // lower ranks takes extra work, no extra pay though...
+	if(rank <= remainder){ // lower ranks takes extra work, no extra pay though...
 		lines2Process++;
 	}
 
 	int rowData[XSIZE];
-	rank = rank - 1; // rank 0 handles results, and i like 0-indexing sooooo.....
-	int row;
+	int row2Process; // rank 0 handles results,
 	for(int i = 0; i < lines2Process; i++){
+		row2Process = rank - 1 + i * workingProcessors; // cyclic distribution of workload
 		for(int j = 0; j < XSIZE; j++){
-
-			row = rank + i * workingProcessors; // cyclic distribution of workload
 			complex_t c, z, temp;
 			int iter=0;
-
 	    // find our starting complex number c
-			c.real = (x_start + step*row);
-			c.imag = (ylower + step*j);
-
+			c.real = (x_start + step*j);
+			c.imag = (ylower + step*row2Process);
 	    // our starting z is c
 			z = c;
-
+			// printf("%lf, %lf\n",z.real, z.imag);
 			while(z.real*z.real + z.imag*z.imag < 4) {
 				z = add_complex(square_complex(z), julia_C);
 				if(++iter==MAXITER) break;
 			}
 			rowData[j] = iter;
 		}
-		MPI_Send(rowData, XSIZE, MPI_INT, 0, 0, MPI_COMM_WORLD); // sending one row of results, BLOCKING!! // save results and send collected or send each row?
+		//  printf("Sending line nr: %d from process %d\n", row, rank);
+		 MPI_Send(rowData, XSIZE, MPI_INT, 0, 1, MPI_COMM_WORLD); // sending one row of results, BLOCKING!! // save results and send collected or send each row?
 	}
+	printf("Process %d sent all lines. Lines Processed: %d \n", rank, lines2Process);
 }
 
 
 int main(int argc,char **argv) {
+
 	if(argc==1) {
 		puts("Usage: JULIA\n");
 		puts("Input real and imaginary part. ex: ./julia 0.0 -0.8");
@@ -94,14 +93,13 @@ int main(int argc,char **argv) {
 	}
 
 
-
-
 	int rank;
 	int numproc;
 	MPI_Init(NULL, NULL);
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 	MPI_Comm_size(MPI_COMM_WORLD, &numproc);
-
+	double starttime, endtime;
+	starttime = MPI_Wtime();
 	int workingProcessors = numproc - 1; // working processors. Process 0 receive result and organize only.
 
 	// Idea is to laod balance using cyclic distribution of rows that need caclulating, since C is row major, and laods rows in cache. Does this matter?
@@ -109,49 +107,59 @@ int main(int argc,char **argv) {
 	// lowest ranks gets more work! Obviously not rank 0 though
 
 	if(rank == 0){
-		int pixel[XSIZE*YSIZE];
-		unsigned char *buffer=calloc(XSIZE*YSIZE*3,1);
-		MPI_Status Status;
+		printf("XSIZE: %d, YSIZE %d\n", XSIZE, YSIZE);
+		int pixel[XSIZE * YSIZE];
 		int rowData[XSIZE];
+		int senderRank = 0;
 
-
-		// Receive and store data to pixel
 		for(int i = 0; i < YSIZE; i++){
-			int senderRank = (i+1) % workingProcessors; // get rank of worker we expect data from
-			MPI_Recv(&rowData, XSIZE, MPI_INT, senderRank, 0, MPI_COMM_WORLD, &Status);
+			senderRank++;
+			if(senderRank > workingProcessors){
+				senderRank = 1;
+			}
+			// printf("Expecting from process %d, line nr: %d of %d\n", senderRank, i, YSIZE-1);
+			MPI_Recv(rowData, XSIZE, MPI_INT, senderRank, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
-			/* create nice image from iteration counts. take care to create it upside
-				 down (bmp format) */
-			for(int j=0;j<XSIZE;j++) {
-				int p=((YSIZE-j-1)*XSIZE+i)*3;
-				fancycolour(buffer+p,pixel[PIXEL(i,j)]);
+			// fill all values from received buffer into pixel
+			for(int j = 0; j < XSIZE; j++){
+				//printf("Error in for loop when j = %d, PIXEL(i,j) = %d\n",j, PIXEL(i,j));
+					pixel[i*XSIZE + j] = rowData[j];
 			}
 		}
 
-		/* write image to disk */
-		savebmp("julia.bmp",buffer,XSIZE,YSIZE);
+		/* create nice image from iteration counts. take care to create it upside
+	     down (bmp format) */
+			//  printf("Error happened at fancycolor loop");
+	  unsigned char *buffer=calloc(XSIZE*YSIZE*3,1);
+	  for(int i=0;i<XSIZE;i++) {
+	    for(int j=0;j<YSIZE;j++) {
+	      int p=((YSIZE-j-1)*XSIZE+i)*3;
+	      fancycolour(buffer+p,pixel[PIXEL(i,j)]);
+	    }
+	  }
+	  /* write image to disk */
+	  savebmp("julia.bmp",buffer,XSIZE,YSIZE);
 	} // END RANK 0
 	else{
 		/* Calculate the range in the y-axis such that we preserve the
-		aspect ratio */
+		   aspect ratio */
 		step=(x_end-x_start)/XSIZE;
 		yupper=ycenter+(step*YSIZE)/2;
 		ylower=ycenter-(step*YSIZE)/2;
 
-		// Unlike the mandelbrot set where C is the coordinate being iterated, the
-		// julia C is the same for all points and can be chosed arbitrarily
-		complex_t julia_C;
+	  // Unlike the mandelbrot set where C is the coordinate being iterated, the
+	  // julia C is the same for all points and can be chosed arbitrarily
+	  complex_t julia_C;
 
-		// Get the command line args
-		julia_C.real = strtod(argv[1], NULL);
-		julia_C.imag = strtod(argv[2], NULL);
+	  // Get the command line args
+	  julia_C.real = strtod(argv[1], NULL);
+	  julia_C.imag = strtod(argv[2], NULL);
 
 		calculate(julia_C, rank, workingProcessors);
 
 	} // END WORKERS
-
-
-
-
+	endtime = MPI_Wtime();
 	MPI_Finalize();
+
+	printf("rank: %d time: %lf\n", rank, endtime -starttime);
 }

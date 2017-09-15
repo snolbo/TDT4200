@@ -50,6 +50,11 @@ double absolute_value(complex_t a) {
 	return sqrt(pow(a.real, 2) + pow(a.imag, 2));
 }
 
+double walltime() {
+static struct timeval t;
+gettimeofday(&t, NULL);
+return (t.tv_sec + 1e-6 * t.tv_usec);
+}
 
 
 
@@ -89,13 +94,8 @@ void calculate(complex_t julia_C) {
 
 
 int main(int argc,char **argv) {
-/*
-	printf("\n The number of arguments= %d \n", argc );
-	for(int i = 0; i < argc; i++){
-		printf("\n %s", argv[i]);
-	}
-return 0;
-*/
+	double starttime, endtime;
+	starttime = walltime();
 	if(argc==1) {
 		puts("Usage: JULIA\n");
 		puts("Input real and imaginary part. ex: ./julia 0.0 -0.8");
@@ -129,5 +129,8 @@ return 0;
   }
   /* write image to disk */
   savebmp("julia.bmp",buffer,XSIZE,YSIZE);
+	endtime = walltime();
+
+	printf("time: %lf\n", endtime -starttime);
 	return 0;
 }

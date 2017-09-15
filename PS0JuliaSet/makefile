@@ -28,3 +28,7 @@ clean :
 #.PHONY : test
 #test : all
 #	./test.sh myProgram
+
+.PHONY : test
+test : all
+	./julia 0.0 0.0 #-0.162 1.04

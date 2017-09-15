@@ -25,6 +25,6 @@ clean :
 	rm -f *.o && rm -f *.gch
 
 # Finally, the test target. Builds the 'all' target, then runs the test script on the output
-#.PHONY : test
-#test : all
-#	./test.sh myProgram
+.PHONY : test
+test : all
+	mpirun -np 3 ./julia_mpi -0.162 1.04

@@ -6,15 +6,15 @@
 #include <math.h>
 #include "bitmap.h"
 
-#define XSIZE 2560
-#define YSIZE 2048
+#define XSIZE 900
+#define YSIZE 1000
 
 
 #define MAXITER 255
 
 // note that we are extra careful with preprocessor macros. Adding parenthesises is never the
 // wrong choice.
-#define PIXEL(i,j) ((i)+(j)*XSIZE)
+ #define PIXEL(i,j) ((i)+(j)*XSIZE)
 
 // In order to work with complex numbers we need a datatype to hold a real and imaginary part
 typedef struct {
@@ -29,5 +29,8 @@ complex_t add_complex(complex_t a, complex_t b);
 complex_t add_real(complex_t a, int b);
 complex_t add_imag(complex_t a, int b);
 double absolute_value(complex_t a);
+
+
+
 
 #endif

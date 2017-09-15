@@ -2,16 +2,15 @@ CFLAGS+= -std=c99
 
 # by uncommenting this line the preprocessor will see #ifdef DEBUG as true
 # CFLAGS+= -DDEBUG
-objects = collective.o
+objects = arraySendTest.o
 SHELL := /bin/bash
-
 # When running "make" in your terminal, the first target will be chosen.
 # The syntax of make is basically:
 # name : [stuff I need to make this target]
 
 # In this case the dependencies are easy to figure out, so I will not elaborate further
 all : $(objects)
-	mpicc $(objects) -o collective
+	mpicc $(objects) -o arrayTest
 
 # In this target [stuff I need to make this target] is two other targets, namely clean and all
 # This command simply runs the clean target, then the all target, thus recompiling everything.
@@ -28,3 +27,6 @@ clean :
 #.PHONY : test
 #test : all
 #	./test.sh myProgram
+.PHONY : arrayTest
+arrayTest : all
+	mpirun -np 2 ./arrayTest
