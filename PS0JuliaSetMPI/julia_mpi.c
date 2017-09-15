@@ -99,6 +99,7 @@ int main(int argc,char **argv) {
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 	MPI_Comm_size(MPI_COMM_WORLD, &numproc);
 	double starttime, endtime;
+	MPI_Barrier(MPI_COMM_WORLD);
 	starttime = MPI_Wtime();
 	int workingProcessors = numproc - 1; // working processors. Process 0 receive result and organize only.
 
@@ -139,6 +140,9 @@ int main(int argc,char **argv) {
 	  }
 	  /* write image to disk */
 	  savebmp("julia.bmp",buffer,XSIZE,YSIZE);
+	MPI_Barrier(MPI_COMM_WORLD);
+	endtime = MPI_Wtime();
+	printf("Time: %lf\n",endtime-starttime);
 	} // END RANK 0
 	else{
 		/* Calculate the range in the y-axis such that we preserve the
@@ -156,10 +160,8 @@ int main(int argc,char **argv) {
 	  julia_C.imag = strtod(argv[2], NULL);
 
 		calculate(julia_C, rank, workingProcessors);
-
-	} // END WORKERS
-	endtime = MPI_Wtime();
-	MPI_Finalize();
+		MPI_Barrier(MPI_COMM_WORLD);
+	} // END WORKERr
 
 	printf("rank: %d time: %lf\n", rank, endtime -starttime);
 }
