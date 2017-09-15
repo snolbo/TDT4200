@@ -110,6 +110,7 @@ int main(int argc,char **argv) {
 	if(rank == 0){
 		printf("XSIZE: %d, YSIZE %d\n", XSIZE, YSIZE);
 		int pixel[XSIZE * YSIZE];
+		unsigned char *buffer=calloc(XSIZE*YSIZE*3,1);
 		int rowData[XSIZE];
 		int senderRank = 0;
 
@@ -131,7 +132,6 @@ int main(int argc,char **argv) {
 		/* create nice image from iteration counts. take care to create it upside
 	     down (bmp format) */
 			//  printf("Error happened at fancycolor loop");
-	  unsigned char *buffer=calloc(XSIZE*YSIZE*3,1);
 	  for(int i=0;i<XSIZE;i++) {
 	    for(int j=0;j<YSIZE;j++) {
 	      int p=((YSIZE-j-1)*XSIZE+i)*3;
@@ -139,7 +139,8 @@ int main(int argc,char **argv) {
 	    }
 	  }
 	  /* write image to disk */
-	  savebmp("julia.bmp",buffer,XSIZE,YSIZE);
+	savebmp("julia.bmp",buffer,XSIZE,YSIZE);
+	free(buffer);
 	MPI_Barrier(MPI_COMM_WORLD);
 	endtime = MPI_Wtime();
 	printf("Time: %lf\n",endtime-starttime);
@@ -164,4 +165,5 @@ int main(int argc,char **argv) {
 		calculate(julia_C, rank, workingProcessors);
 		MPI_Barrier(MPI_COMM_WORLD);
 	} // END WORKERr
+	MPI_Finalize();
 }
