@@ -6,8 +6,8 @@
 #include <math.h>
 #include "bitmap.h"
 
-#define XSIZE 900
-#define YSIZE 1000
+#define XSIZE 10000
+#define YSIZE 10000
 
 
 #define MAXITER 255

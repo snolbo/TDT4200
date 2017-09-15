@@ -1,9 +1,9 @@
 #!/bin/sh
 #SBATCH --partition=TRAINING
 #SBATCH --time=00:00:30
-#SBATCH --nodes=1
-#SBATCH --ntasks-per-node=4
-#SBATCH --mem=500
+#SBATCH --nodes=3
+#SBATCH --ntasks-per-node=2
+#SBATCH --mem=3000
 # Memory per node specification is in MB. It is optional.
 # The default limit is 3000MB per core.
 #SBATCH --job-name="JuliaSetMPISnolbo"
@@ -13,5 +13,5 @@
 
 module load GCC
 module load OpenMPI
-make
-mpirun -np 4 ./julia_mpi -0.0 0.0
+make remake
+mpirun -np 6 ./julia_mpi -0.8 0.156
