@@ -31,4 +31,4 @@ clean :
 
 .PHONY : test
 test : all
-	./julia 0.0 0.0 #-0.162 1.04
+	./julia -0.162 1.04

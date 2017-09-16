@@ -5,8 +5,8 @@
 #include "mpi.h"
 
 
-double x_start=-0.5;
-double x_end=0.4;
+double x_start=-2;
+double x_end=1;
 double yupper;
 double ylower;
 double ycenter=0;
@@ -149,10 +149,10 @@ int main(int argc,char **argv) {
 		/* Calculate the range in the y-axis such that we preserve the
 		   aspect ratio */
 		step=(x_end-x_start)/XSIZE;
-		// yupper=ycenter+(step*YSIZE)/2;
-		// ylower=ycenter-(step*YSIZE)/2;
-		yupper = 0.2;
-		ylower = -0.1;
+		yupper=ycenter+(step*YSIZE)/2;
+		ylower=ycenter-(step*YSIZE)/2;
+		// yupper = 0.2;
+		// ylower = -0.1;
 
 	  // Unlike the mandelbrot set where C is the coordinate being iterated, the
 	  // julia C is the same for all points and can be chosed arbitrarily

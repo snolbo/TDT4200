@@ -7,8 +7,8 @@
 #include "bitmap.h"
 #include <sys/time.h>
 
-#define XSIZE 900
-#define YSIZE 1000
+#define XSIZE 15000
+#define YSIZE 15000
 
 
 #define MAXITER 255
