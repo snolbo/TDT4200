@@ -1,5 +1,0 @@
-gcc bitmap.o julia_handout.o -o julia -lm
-
-real	0m20.401s
-user	0m20.353s
-sys	0m0.021s
