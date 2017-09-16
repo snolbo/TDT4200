@@ -88,7 +88,7 @@ void calculate(complex_t julia_C) {
 				if(++iter==MAXITER) break;
 			}
 			pixel[PIXEL(i,j)]=iter;
-			printf("%d\n",i);
+		//	printf("%d\n",i);
 		}
 	}
 }

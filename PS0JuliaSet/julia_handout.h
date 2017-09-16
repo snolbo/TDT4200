@@ -7,11 +7,11 @@
 #include "bitmap.h"
 #include <sys/time.h>
 
-#define XSIZE 15000
-#define YSIZE 15000
+#define XSIZE 7680
+#define YSIZE 6144
 
 
-#define MAXITER 255
+#define MAXITER 765
 
 // note that we are extra careful with preprocessor macros. Adding parenthesises is never the
 // wrong choice.

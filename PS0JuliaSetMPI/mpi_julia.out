@@ -2,5 +2,5 @@ rm -f *.o && rm -f *.gch
 cc -std=c99   -c -o bitmap.o bitmap.c
 cc -std=c99   -c -o julia_mpi.o julia_mpi.c
 mpicc bitmap.o julia_mpi.o -o julia_mpi -lm
-XSIZE: 24000, YSIZE 13000
-Time: 612.189187
+XSIZE: 7680, YSIZE 6114
+Time: 15.936459

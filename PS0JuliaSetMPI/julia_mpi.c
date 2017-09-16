@@ -5,11 +5,11 @@
 #include "mpi.h"
 
 
-double x_start=-2;
+double x_start=-2.01;
 double x_end=1;
 double yupper;
 double ylower;
-double ycenter=0;
+double ycenter=1e-6;
 double step;
 
 // I suggest you implement these, however you can do fine without them if you'd rather operate
@@ -151,8 +151,6 @@ int main(int argc,char **argv) {
 		step=(x_end-x_start)/XSIZE;
 		yupper=ycenter+(step*YSIZE)/2;
 		ylower=ycenter-(step*YSIZE)/2;
-		// yupper = 0.2;
-		// ylower = -0.1;
 
 	  // Unlike the mandelbrot set where C is the coordinate being iterated, the
 	  // julia C is the same for all points and can be chosed arbitrarily
