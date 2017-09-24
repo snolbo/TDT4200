@@ -1,0 +1,5 @@
+rm -f *.o && rm -f *.gch
+cc -std=c99   -c -o bitmap.o bitmap.c
+cc -std=c99   -c -o julia_handout.o julia_handout.c
+gcc bitmap.o julia_handout.o -o julia -lm
+time: 458.275765
