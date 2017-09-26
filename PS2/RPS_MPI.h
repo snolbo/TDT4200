@@ -21,8 +21,8 @@ const int WINNER_TABLE[4][4] = {  {0, -1, -1, -1},
                                   {0, -1, 1, 0} };
 
 // seems to crash for some values when size does not match up with numproc. Think is has to do with definition of local dim in initialize
-#define IMG_X 113
-#define IMG_Y 57
+#define IMG_X 18
+#define IMG_Y 18
 
 
 
@@ -30,5 +30,5 @@ const int WINNER_TABLE[4][4] = {  {0, -1, -1, -1},
 #define BORDER_SIZE 1
 
 // How many iterations?
-#define ITERATIONS 71
+#define ITERATIONS 70
 #endif
