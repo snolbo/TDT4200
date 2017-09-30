@@ -141,10 +141,11 @@ void initialize(){
   local_next = calloc(local_x_dim * local_y_dim , sizeof(cell));
 
   // Randomly perturb local area
+  int rand_color; int rand_str;
   for(int row = BORDER_SIZE; row < local_y_dim - BORDER_SIZE; row++){
     for(int col = BORDER_SIZE; col < local_x_dim - BORDER_SIZE; col++){
-      int rand_color = rand() % 4;
-      int rand_str = 1;
+      rand_color = rand() % 4;
+      rand_str = 1;
       if(rand_color > 0){
         rand_str = 1 + rand() % 6;
       }

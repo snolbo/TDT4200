@@ -19,10 +19,10 @@ typedef struct {
 #define PAPER   2
 #define SCISSOR 3
 
-#define IMG_X 1200
-#define IMG_Y 1200
+#define IMG_X 12
+#define IMG_Y 12
 
 #define BORDER_SIZE 1
 
-#define ITERATIONS 10000
+#define ITERATIONS 100
 #endif

@@ -13,7 +13,7 @@ cell** alloc_img(cell* buffer, int index){
 }
 
 void free_img(cell** image){
-  for (int ii = 0; ii < IMG_X; ii++){
+  for(int ii = 0; ii < IMG_X; ii++){
     free(image[ii]);
   }
   free(image);
