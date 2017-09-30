@@ -1,7 +1,7 @@
 #ifndef CA_H
 #define CA_H
 
-#include "RPS.h"
+#include "RPS_MPI.h" // for definition of cell
 
 
 void free_img(cell** image);

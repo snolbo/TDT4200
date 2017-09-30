@@ -14,7 +14,7 @@ SHELL := /bin/bash
 
 # In this case the dependencies are easy to figure out, so I will not elaborate further
 parallel: $(util_objects) $(parallel_objects)
-	mpicc $(util_objects) $(parallel_objects) -o parallelRPS -lm
+	mpicc $(util_objects) $(parallel_objects) -o RPSparallel -lm
 
 serial : $(util_objects) $(serial_objects)
 	gcc $(util_objects) $(serial_objects) -o serialRPS
@@ -24,7 +24,7 @@ RPS_MPI.o: RPS_MPI.c RPS_MPI.h
 
 # In this target [stuff I need to make this target] is two other targets, namely clean and all
 # This command simply runs the clean target, then the all target, thus recompiling everything.
-remake : clean all
+remake : clean parallel
 
 # We add .PHONY when a target doesn't actually create any output. In this case we just run a shell
 # command, removing all object files, i.e files ending on .o
