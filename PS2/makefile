@@ -1,4 +1,4 @@
-# CFLAGS+= -std=c99 -g -O3
+CFLAGS+= -std=c99 -g -O3
 
 # by uncommenting this line the preprocessor will see #ifdef DEBUG as true
 # CFLAGS+= -DDEBUG
@@ -14,13 +14,13 @@ SHELL := /bin/bash
 
 # In this case the dependencies are easy to figure out, so I will not elaborate further
 parallel: $(util_objects) $(parallel_objects)
-	mpicc $(util_objects) $(parallel_objects) -o RPSparallel -lm
+	mpicc $(CFLAGS) $(util_objects) $(parallel_objects) -o RPSparallel
 
 serial : $(util_objects) $(serial_objects)
-	gcc $(util_objects) $(serial_objects) -o serialRPS
+	gcc $(CFLAGS) $(util_objects) $(serial_objects) -o serialRPS
 
 RPS_MPI.o: RPS_MPI.c RPS_MPI.h
-	mpicc -c RPS_MPI.c RPS_MPI.h
+	mpicc -$(CFLAGS) -c RPS_MPI.c RPS_MPI.h
 
 # In this target [stuff I need to make this target] is two other targets, namely clean and all
 # This command simply runs the clean target, then the all target, thus recompiling everything.

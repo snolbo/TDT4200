@@ -12,5 +12,5 @@
 #SBATCH --mail-type=ALL
 
 module load GCC
-module load OpenMPI
+module load OpenMPI/2.0.2
 mpirun -np 4 ./RPSparallel

@@ -327,13 +327,13 @@ void send_and_receive(int send_direction, int receive_direction, cell* border_da
   MPI_Request reqs[2]; MPI_Status stats[2];
   if(is_row_type){
     if(receive_direction != -1){
-      MPI_Irecv(border_data_recv, 1, border_row_t, receive_direction, receive_direction, cart_comm, &reqs[0]);
+      MPI_Irecv(border_data_recv, 1, border_row_t, receive_direction, 0, cart_comm, &reqs[0]);
     }
     else{
       reqs[0] = MPI_REQUEST_NULL;
     }
     if(send_direction != -1){
-      MPI_Isend(border_data_send, 1, border_row_t, send_direction, rank, cart_comm, &reqs[1]);
+      MPI_Isend(border_data_send, 1, border_row_t, send_direction, 0, cart_comm, &reqs[1]);
     }
     else{
       reqs[1] = MPI_REQUEST_NULL;
@@ -341,13 +341,13 @@ void send_and_receive(int send_direction, int receive_direction, cell* border_da
   }
   else{
     if(receive_direction != -1){
-      MPI_Irecv(border_data_recv, 1, border_col_t, receive_direction, receive_direction, cart_comm, &reqs[0]);
+      MPI_Irecv(border_data_recv, 1, border_col_t, receive_direction, 0, cart_comm, &reqs[0]);
     }
     else{
       reqs[0] = MPI_REQUEST_NULL;
     }
     if(send_direction != -1){
-      MPI_Isend(border_data_send, 1, border_col_t, send_direction, rank, cart_comm, &reqs[1]);
+      MPI_Isend(border_data_send, 1, border_col_t, send_direction, 0, cart_comm, &reqs[1]);
     }
     else{
       reqs[1] = MPI_REQUEST_NULL;
