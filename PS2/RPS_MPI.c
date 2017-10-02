@@ -79,17 +79,28 @@ int main(int argc, char** argv){
   create_types();
   allocate_memory_border_exchange();
 
+  if(rank ==0){
+    printf("Rank 0 is begginning border and iterate loop\n");
+  }
+
   for(int it = 0; it < ITERATIONS; it++){
     exchange_borders();
     iterate_CA();
   }
 
+  if(rank ==0){
+    printf("Rank 0 is beginning gather_petri\n");
+  }
   gather_petri();
 
+
   if(rank==0){
+    printf("Rank 0 is beginning to make image\n");
     cell** img = alloc_img(collected_area, 0);
     make_bmp(img);
+    printf("Rank 0 finished making image and starting cleanup\n");
   }
+
 
   free_memory();
   MPI_Finalize();
