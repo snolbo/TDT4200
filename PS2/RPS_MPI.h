@@ -24,5 +24,5 @@ typedef struct {
 
 #define BORDER_SIZE 1
 
-#define ITERATIONS 10000
+#define ITERATIONS 1000
 #endif
