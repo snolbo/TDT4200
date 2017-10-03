@@ -1,7 +1,7 @@
 #!/bin/sh
 #SBATCH --partition=TRAINING
-#SBATCH --time=00:01:00
-#SBATCH --nodes=1
+#SBATCH --time=00:10:00
+#SBATCH --nodes=4
 #SBATCH --ntasks-per-node=4
 #SBATCH --mem=3000
 # Memory per node specification is in MB. It is optional.
@@ -13,4 +13,4 @@
 
 module load GCC
 module load OpenMPI/2.0.2
-mpirun -np 4 ./RPSparallel
+mpirun -np 16 ./RPSparallel

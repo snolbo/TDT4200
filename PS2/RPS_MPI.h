@@ -19,8 +19,8 @@ typedef struct {
 #define PAPER   2
 #define SCISSOR 3
 
-#define IMG_X 600
-#define IMG_Y 600
+#define IMG_X 1200
+#define IMG_Y 1200
 
 #define BORDER_SIZE 1
 

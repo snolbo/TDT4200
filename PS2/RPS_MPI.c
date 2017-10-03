@@ -73,7 +73,10 @@ int main(int argc, char** argv){
   MPI_Init(&argc, &argv);
   MPI_Comm_size(MPI_COMM_WORLD, &size);
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-
+  
+  if(rank ==0){
+    printf("Image size: %d, %d. Iterations: %d \n", IMG_X, IMG_Y, ITERATIONS);
+  }
   initialize();
 
   create_types();
@@ -82,6 +85,9 @@ int main(int argc, char** argv){
   for(int it = 0; it < ITERATIONS; it++){
     exchange_borders();
     iterate_CA();
+    if(rank == 0 && it % 1000 == 0){
+      printf("On iteration: %d\n", it);
+    }
   }
 
   gather_petri();
