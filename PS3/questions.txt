@@ -1,0 +1,22 @@
+
+
+OMP version:
+  -WHy does valgrind say that I have not freed memory, but in pthread version everything is freed???
+  - Is there a way that I dont need to create and close a parallel region for every iterations in ITERATIONS loop?
+  - can i just do ceil chunk? Does this cause some overlapping in iterations between threads? or is this just max amount of work it will be distributed?
+
+
+PTH version:
+  - Is there a better way to implement switching petris in between iterations than the double barrier I have used?
+  - Is using gnu99 instead of stdc99 ok in order to get to use pthread_barrier_t??
+  - when making, some warning about different size when casting
+  - IS it ok do dump all axtra work to last last thread when img size is not wholy divided nby number of processors? I mean its almost no percentage difference
+
+What is the fuzz about the rand function??? There is no rand function in CA.c
+
+In the handout code, it is forgotten to free the buffers in the make_bmp functions, I have fixed this myself in the functions
+
+Reading intergers from command line argument in both versions
+
+
+iterations are done from row 1 and row size -3. Is it ok to do this for the rest aswell? meaning 2 white lines at bot, 1 white line/col other edges?
