@@ -80,8 +80,8 @@ void iterate_image(cell* old_image, cell* next_image){
   int seed = rand();
   seed = (seed * 0x5DEECE66DL + 0xBL) & 0xFFFFFFFFFFFFL;
 
-  for(int xx = 1; xx < IMG_X - 2; xx++){
-    for(int yy = 1; yy < IMG_Y - 2; yy++){
+  for(int yy = 1; yy < IMG_Y - 2; yy++){
+    for(int xx = 1; xx < IMG_X - 2; xx++){
       next_image[TRANS(xx,yy)] = next_cell(xx, yy, old_image, (seed % 8) + 8*(seed < 8));
     }
   }

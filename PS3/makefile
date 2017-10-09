@@ -13,7 +13,7 @@ omp :
 	gcc -std=c99 -g -O3 -fopenmp CA.h CA.c bitmap.h bitmap.c RPS_omp.c RPS.h -o RPS_omp -lm
 
 pth : # IS IT OK TO USE gnu99 to get pthread_barrier_t???????
-	gcc -std=gnu99 -g -O3 -pthread CA.h CA.c bitmap.h bitmap.c RPS_pth.c RPS.h -o RPS_pthread
+	gcc -std=c99 -g -O3 -pthread CA.h CA.c bitmap.h bitmap.c RPS_pth.c RPS.h -o RPS_pthread
 
 remake : clean all
 
@@ -39,3 +39,6 @@ omptest:
 
 pthtest:
 	gcc -std=c99 -g -O3 -pthread pthtest.c -o pthtest.out -lm
+
+barriertest:
+	gcc -std=c99 -g -O3 -pthread barriertest.c -o barriertest.out

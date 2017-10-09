@@ -8,11 +8,11 @@ OMP version:
 
 PTH version:
   - Is there a better way to implement switching petris in between iterations than the double barrier I have used?
-  - Is using gnu99 instead of stdc99 ok in order to get to use pthread_barrier_t??
+  - Is using gnu99 instead of stdc99 ok in order to get to use pthread_barrier_t?? SPØR PETER?
   - when making, some warning about different size when casting
   - IS it ok do dump all axtra work to last last thread when img size is not wholy divided nby number of processors? I mean its almost no percentage difference
 
-What is the fuzz about the rand function??? There is no rand function in CA.c
+What is the thing about the rand function??? There is no rand function in CA.c
 
 In the handout code, it is forgotten to free the buffers in the make_bmp functions, I have fixed this myself in the functions
 
