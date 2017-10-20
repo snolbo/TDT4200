@@ -38,11 +38,11 @@ int main(int argc, char** argv){
 
 
     for(int ii = 0; ii < ITERATIONS; ii++){
-      int seed = rand();
       seed = (seed * 0x5DEECE66DL + 0xBL) & 0xFFFFFFFFFFFFL;
       // Iterations are parallelized
       #pragma omp parallel for num_threads(NUM_THREADS) schedule(static) collapse(2)
       for(int yy = 1; yy < IMG_Y - 2; yy++){
+        int seed = rand();
         for(int xx = 1; xx < IMG_X - 2; xx++){
           petri_B[TRANS(xx,yy)] = next_cell(xx, yy, petri_A, (seed % 8) + 8*(seed < 8));
         }
