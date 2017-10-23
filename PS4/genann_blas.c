@@ -338,6 +338,7 @@ void genann_train(genann const *ann, double const *inputs, double const *desired
 
     /* Set hidden layer deltas, start on last layer and work backwards. */
     /* Note that loop is skipped in the case of hidden_layers == 0. */
+    double* result = calloc(ann->hidden + 1, sizeof(double));
     for (h = ann->hidden_layers - 1; h >= 0; --h) {
 
         /* Find first output and delta in this layer. */
@@ -359,37 +360,32 @@ void genann_train(genann const *ann, double const *inputs, double const *desired
     //##########################################################################
     //##########################################################################
     //##########################################################################
+      lenX = ann->hidden + 1;
+      lenY = (h == ann->hidden_layers-1 ? ann->outputs : ann->hidden);
+      lda = lenX;
+      cblas_dgemv(CblasRowMajor, CblasTrans, lenY, lenX, 1, ww, lda, dd, 1, 0, result, 1);
+      // printf("\n");
+      for(int i = 0; i < ann->hidden; i++){
+        *d = *o * (1.0-*o) * result[i+1]; // Vector operation? (1-delta)*o + delta
+        // printf("%2f\n", *d);
+        ++d; ++o;
+      }
 
-    // lenX = ann->hidden;
-    // lenY = (h == ann->hidden_layers-1 ? ann->outputs : ann->hidden);
-    // lda = lenY; // ROW DOMINANT
-    // alpha = 1;
-    // beta = 0;
-    // incX = 1;
-    // incY = 1;
-    // cblas_dgemv(CblasRowMajor, CblasNoTrans, lenY, lenX, alpha, ww, lda, dd, incX, beta, d, incY);
-    // // HOW TO SCALE BY (o * (1-o) ) use diagonal matrix?
-    // ww += lenX * lenY;
-    // d += lenX;
-    // o += lenX;
+      // #### ORIGINAL CODE ####
+        // for (j = 0; j < ann->hidden; ++j) {
+        //     double delta = 0;
+        //     for (k = 0; k < (h == ann->hidden_layers-1 ? ann->outputs : ann->hidden); ++k) {
+        //         const double forward_delta = dd[k];
+        //         const int windex = k * (ann->hidden + 1) + (j + 1);
+        //         const double forward_weight = ww[windex];
+        //         delta += forward_delta * forward_weight;
+        //     }
+        //     *d = *o * (1.0-*o) * delta;
+        //     ++d; ++o;
+        // }
+   }
+   free(result);
 
-
-///////////////////////////////////////////////////////////7777
-        for (j = 0; j < ann->hidden; ++j) {
-
-            double delta = 0;
-
-            for (k = 0; k < (h == ann->hidden_layers-1 ? ann->outputs : ann->hidden); ++k) {
-                const double forward_delta = dd[k];
-                const int windex = k * (ann->hidden + 1) + (j + 1);
-                const double forward_weight = ww[windex];
-                delta += forward_delta * forward_weight;
-            }
-
-            *d = *o * (1.0-*o) * delta; // Vector operation? (1-delta)*o + delta
-            ++d; ++o;
-        }
-    }
 
 
     /* Train the outputs. */

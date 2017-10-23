@@ -47,6 +47,7 @@ int main(int argc, char **argv) {
                     21, 22, 23, 24, 25
                   };
   double x[5]  = {1,1,1,1,1};
+  double z[5] = {2, 2, 2, 2, 2};
   int lenX = 5;
   int lenY = 5;
   int lda = lenY;
@@ -65,22 +66,14 @@ int main(int argc, char **argv) {
   // printVector(4, y, 8, 3, NULL, NULL, NULL, "       y<-1.0*a*xT+0.0*y= ");
   // print_matrix(a, 20, 5);
   print_vector(y, lenY);
-
-
   cblas_daxpy(lenX, alpha, y, incX, a, lenX);
-
   print_matrix(a, 25, 5);
 
 
 
-          /* row_order       lenY lenX alpha  X  incX  Y, incY A  LDA */
-  cblas_dger(CblasRowMajor,  4,   5,   1,     y, 1,    x, 1,   a, 5);
-  // printMatrix(CblasRowMajor, 4, 5, a, 8, 3, NULL, NULL, NULL, NULL, NULL, "a <- 1.0*x.yT+a = ");
-
-
-// for( int i = 0; i < 10; ++i){
-//   printf("%d\n", i);
-// }
+for( int i = 0; i < 10; ++i){
+  printf("%d\n", i);
+}
 
 
   return 0;
