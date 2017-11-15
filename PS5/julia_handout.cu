@@ -5,8 +5,8 @@
 #include <math.h>
 
 
-#define XSIZE 2560
-#define YSIZE 2048
+#define XSIZE 12800
+#define YSIZE 12800
 
 #define MAXITER 255
 #define PIXEL(i,j) ((i)+(j)*XSIZE)
@@ -50,10 +50,12 @@ double walltime() {
     return (t.tv_sec + 1e-6 * t.tv_usec);
 }
 
+int* pixel_device;
+
 
 // Set up the cuda memory transfers, launch your kernel and extract the finished image
 void calculate_cuda(float x_start, float ylower, float step){
-	int* pixel_device;
+	//int* pixel_device;
 	cudaMalloc(&pixel_device, XSIZE*YSIZE*sizeof(int));
 	size_t threads_per_block_dim = 32;
 	// Assumin that XSIZE and YSIZE is dividable by 32
@@ -62,7 +64,6 @@ void calculate_cuda(float x_start, float ylower, float step){
 	julia_kernel<<<gridBlock, threadBlock>>>(pixel_device, x_start, ylower, step);
 	cudaMemcpy(pixel_host, pixel_device, XSIZE*YSIZE*sizeof(int), cudaMemcpyDeviceToHost);
   cudaFree(pixel_device);
-
 }
 
 
@@ -126,13 +127,16 @@ int main(int argc, char **argv) {
   }
 
   printf("Calculating with CUDA...\n");
+	//cudaMalloc(&pixel_device, XSIZE*YSIZE*sizeof(int));
   double start_gpu = walltime();
   calculate_cuda(x_start, ylower, step);
   double end_gpu = walltime();
-  printf("Computation complete. It took %7.3f ms\n", end_gpu - start_gpu);
+	//cudaMemcpy(pixel_host, pixel_device, XSIZE*YSIZE*sizeof(int), cudaMemcpyDeviceToHost);
+	//cudaFree(pixel_device);
+  printf("Computation complete. It took %7.10f ms\n", end_gpu - start_gpu);
 
 
-  output_bmp();
+  //output_bmp();
 
   return 0;
 }
