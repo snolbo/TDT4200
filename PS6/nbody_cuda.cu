@@ -90,8 +90,8 @@ __device__ float2 calculate_velocity_change_planet(float4 p, float4 q){
   float abs_dist= sqrt(dist.x*dist.x + dist.y*dist.y);
   float dist_cubed = abs_dist*abs_dist*abs_dist;
 
-  dv.x = dT*G*q.mass/dist_cubed * dist.x;
-  dv.y = dT*G*q.mass/dist_cubed * dist.y;
+  dv.x = dT*G*q.z/dist_cubed * dist.x;
+  dv.y = dT*G*q.z/dist_cubed * dist.y;
 
   return dv;
 }
@@ -127,7 +127,7 @@ __global__ void update_velocities(float4* planets, float2* velocities, int num_p
 
 // TODO 7. Update the positions of the planets using the new velocities
 __global__ void update_positions(float4* planets, float2* velocities, int num_planets){
-  int tid = threadIdx + blockIdx.x * blockDim.x;
+  int tid = threadIdx.x + blockIdx.x * blockDim.x;
   planets[tid].x = velocities[tid].x * dT;
   planets[tid].y = velocities[tid].y * dT;
 }
