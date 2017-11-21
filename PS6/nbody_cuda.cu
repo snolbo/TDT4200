@@ -82,28 +82,28 @@ void write_planets(int timestep){
 // TODO 7. Calculate the change in velocity for p, caused by the interaction with q
 __device__ float2 calculate_velocity_change_planet(float4 p, float4 q){
 
-  float2 dv;
-  float2 dist;
-
-  dist.x = q.x - p.x;
-  dist.y = q.y - p.y;
-
-  float abs_dist= sqrt(dist.x*dist.x + dist.y*dist.y);
+  float2 r;
+  r.x = q.x - p.x;
+  r.y = q.y - p.y;
+  if(r.x == 0 && r.y == 0){
+  float2 v = {0.0f, 0.0f};
+  return v;
+  }
+  float abs_dist= sqrt(r.x*r.x + r.y*r.y);
   float dist_cubed = abs_dist*abs_dist*abs_dist;
-
-  dv.x = 0.26*G*q.z/dist_cubed * dist.x;
-  dv.y = 0.26*G*q.z/dist_cubed * dist.y;
-
+  float2 dv;
+  dv.x = dT*G*q.z/dist_cubed * r.x;
+  dv.y = dT*G*q;
   return dv;
 }
 
 // TODO 5. Calculate the change in velocity for my_planet, caused by the interactions with a block of planets
 __device__ float2 calculate_velocity_change_block(float4 my_planet, float4* shared_planets){
-  float2 velocity = {0.0f, 0.0f};
+  float2 velocity = {0.0f,0.0f};
   for(int i = 0; i < blockDim.x; i++){
-    float2 temp_vel = calculate_velocity_change_planet(my_planet, shared_planets[i]);
-    velocity.x += temp_vel.x;
-    velocity.y += temp_vel.y;
+    float2 tempv = calculate_velocity_change_planet(my_planet, shared_planets[i]);
+    velocity.x += tempv.x;
+    velocity.y += tempv.y;
   }
   return velocity;
 }
@@ -111,18 +111,16 @@ __device__ float2 calculate_velocity_change_block(float4 my_planet, float4* shar
 // TODO 4. Update the velocities by calculating the planet interactions
 __global__ void update_velocities(float4* planets, float2* velocities, int num_planets){
 
-  int tid = threadIdx.x + blockIdx.x * blockDim.x;
-  float4 my_planet = planets[tid];
+  int thread_id = blockIdx.x * blockDim.x + threadIdx.x;
+  float4 my_planet = planets[thread_id];
   __shared__ float4 shared_planets[BLOCK_SIZE];
 
   // Compute the velocity change for planets for one block at a time
-  for(int i = 0; i < num_planets; i+= blockDim.x){
-    shared_planets[threadIdx.x] = planets[i+threadIdx.x];
+  for(int i = 0; i < num_planets; i+=blockDim.x){
+    shared_planets[threadIdx.x] = planets[i + threadIdx.x];
     __syncthreads();
-    float2 temp_vel = calculate_velocity_change_block(my_planet, shared_planets);
-
-    velocities[tid].x += temp_vel.x;
-    velocities[tid].y += temp_vel.y;
+    float2 tempv = calculate_velocity_change_block(my_planet, shared_planets);
+    velocities[thread_id].x += tempv.x; velocities[thread_id].y += tempv.y;
     __syncthreads();
   }
 }
@@ -130,8 +128,8 @@ __global__ void update_velocities(float4* planets, float2* velocities, int num_p
 // TODO 7. Update the positions of the planets using the new velocities
 __global__ void update_positions(float4* planets, float2* velocities, int num_planets){
   int tid = threadIdx.x + blockIdx.x * blockDim.x;
-  planets[tid].x = velocities[tid].x * 0.26;
-  planets[tid].y = velocities[tid].y * 0.26;
+  planets[tid].x = velocities[tid].x * dT;
+  planets[tid].y = velocities[tid].y * dT;
 }
 
 
@@ -169,6 +167,9 @@ int main(int argc, char** argv){
                                           cudaMemcpyDeviceToHost);
     cudaMemcpy(velocities,  velocities_d, sizeof(float2)*num_planets,
                                           cudaMemcpyDeviceToHost);
+
+    cudaFree(planets_d);
+    cudaFree(velocities_d);
     // Output
     write_planets(num_timesteps);
 }
