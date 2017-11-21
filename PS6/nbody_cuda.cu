@@ -84,8 +84,8 @@ __device__ float2 calculate_velocity_change_planet(float4 p, float4 q){
   float2 dv;
 
   float2 dist;
-  dist.x = q.position.x - p.position.x;
-  dist.y = q.position.y - p.position.y;
+  dist.x = q.x - p.x;
+  dist.y = q.y - p.y;
 
   float abs_dist= sqrt(dist.x*dist.x + dist.y*dist.y);
   float dist_cubed = abs_dist*abs_dist*abs_dist;
