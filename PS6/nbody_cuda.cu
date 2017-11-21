@@ -83,18 +83,18 @@ void write_planets(int timestep){
 // TODO 7. Calculate the change in velocity for p, caused by the interaction with q
 __device__ float2 calculate_velocity_change_planet(float4 p, float4 q){
 
-  float2 r;
-  r.x = q.x - p.x;
-  r.y = q.y - p.y;
-  if(r.x == 0 && r.y == 0){
-  float2 v = {0.0f, 0.0f};
-  return v;
+  float2 dist;
+  dist.x = q.x - p.x;
+  dist.y = q.y - p.y;
+  if(dist.x == 0 && dist.y == 0){
+  float2 vel = {0.0f, 0.0f};
+  return vel;
   }
-  float abs_dist= sqrt(r.x*r.x + r.y*r.y);
+  float abs_dist= sqrt(dist.x*dist.x + dist.y*dist.y);
   float dist_cubed = abs_dist*abs_dist*abs_dist;
   float2 dv;
-  dv.x = dT*G*q.z/dist_cubed * r.x;
-  dv.y = dT*G*q.z/dist_cubed * r.y;
+  dv.x = dT*G*q.z/dist_cubed * dist.x;
+  dv.y = dT*G*q.z/dist_cubed * dist.y;
   return dv;
 }
 
@@ -102,9 +102,9 @@ __device__ float2 calculate_velocity_change_planet(float4 p, float4 q){
 __device__ float2 calculate_velocity_change_block(float4 my_planet, float4* shared_planets){
   float2 velocity = {0.0f,0.0f};
   for(int i = 0; i < blockDim.x; i++){
-    float2 tempv = calculate_velocity_change_planet(my_planet, shared_planets[i]);
-    velocity.x += tempv.x;
-    velocity.y += tempv.y;
+    float2 temp_vel = calculate_velocity_change_planet(my_planet, shared_planets[i]);
+    velocity.x += temp_vel.x;
+    velocity.y += temp_vel.y;
   }
   return velocity;
 }
