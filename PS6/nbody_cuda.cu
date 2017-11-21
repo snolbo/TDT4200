@@ -12,6 +12,20 @@
 int num_planets;
 int num_timesteps;
 
+// New types
+// Two dimensional vector
+typedef struct{
+    float x;
+    float y;
+} vec2;
+
+// Planet
+typedef struct{
+    vec2 position;
+    vec2 velocity;
+    float mass;
+} planet;
+
 // Host arrays
 float2* velocities;
 float4* planets;
