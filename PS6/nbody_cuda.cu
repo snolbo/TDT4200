@@ -111,17 +111,18 @@ __device__ float2 calculate_velocity_change_block(float4 my_planet, float4* shar
 __global__ void update_velocities(float4* planets, float2* velocities, int num_planets){
 
   int tid = threadIdx.x + blockIdx.x * blockDim.x;
-  float4 planet = planets[tid];
+  float4 my_planet = planets[tid];
   __shared__ float4 shared_planets[BLOCK_SIZE];
 
-  // Compute the velocity change for planets form one block at a time
+  // Compute the velocity change for planets for one block at a time
   for(int i = 0; i < num_planets; i+= blockDim.x){
     shared_planets[threadIdx.x] = planets[i+threadIdx.x];
     __syncthreads();
-    float2 temp_vel = calculate_velocity_change_block(planet, shared_planets);
+    float2 temp_vel = calculate_velocity_change_block(my_planet, shared_planets);
 
-    velocities[tid].x = temp_vel.x;
-    velocities[tid].y = temp_vel.y;
+    velocities[tid].x += temp_vel.x;
+    velocities[tid].y += temp_vel.y;
+    __syncthreads();
   }
 }
 
@@ -165,7 +166,7 @@ int main(int argc, char** argv){
     // TODO 3. Transfer data back to host
     cudaMemcpy(planets,     planets_d,    sizeof(float4)*num_planets,
                                           cudaMemcpyDeviceToHost);
-    cudaMemcpy(velocities,  velocities_d, sizeof(float)*num_planets,
+    cudaMemcpy(velocities,  velocities_d, sizeof(float2)*num_planets,
                                           cudaMemcpyDeviceToHost);
     // Output
     write_planets(num_timesteps);
