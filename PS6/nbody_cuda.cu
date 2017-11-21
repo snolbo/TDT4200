@@ -12,20 +12,6 @@
 int num_planets;
 int num_timesteps;
 
-// New types
-// Two dimensional vector
-typedef struct{
-    float x;
-    float y;
-} vec2;
-
-// Planet
-typedef struct{
-    vec2 position;
-    vec2 velocity;
-    float mass;
-} planet;
-
 // Host arrays
 float2* velocities;
 float4* planets;
@@ -143,8 +129,8 @@ __global__ void update_velocities(float4* planets, float2* velocities, int num_p
 // TODO 7. Update the positions of the planets using the new velocities
 __global__ void update_positions(float4* planets, float2* velocities, int num_planets){
   int tid = threadIdx.x + blockIdx.x * blockDim.x;
-  planets[tid].x = velocities[tid].x * dT;
-  planets[tid].y = velocities[tid].y * dT;
+  planets[tid].x += velocities[tid].x * dT;
+  planets[tid].y += velocities[tid].y * dT;
 }
 
 
