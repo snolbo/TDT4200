@@ -48,21 +48,22 @@ void parse_args(int argc, char** argv){
 // Reads planets from planets.txt
 void read_planets(){
 
-    FILE* file = fopen("planets256.txt", "r");
-    if(file == NULL){
-        printf("'planets.txt' not found. Exiting\n");
-        exit(-1);
-    }
+  char* a;
+  FILE* file = fopen("planets256.txt", "r");
+  if(file == NULL){
+      printf("'planets.txt' not found. Exiting\n");
+      exit(-1);
+  }
 
-    char line[200];
-    fgets(line, 200, file);
-    sscanf(line, "%d", &num_planets);
+  char line[200];
+  a = fgets(line, 200, file);
+  sscanf(line, "%d", &num_planets);
 
     planets = (float4*)malloc(sizeof(float4)*num_planets);
     velocities = (float2*)malloc(sizeof(float2)*num_planets);
 
     for(int p = 0; p < num_planets; p++){
-        fgets(line, 200, file);
+        a = fgets(line, 200, file);
         sscanf(line, "%f %f %f %f %f",
                 &planets[p].x,
                 &planets[p].y,
@@ -77,7 +78,7 @@ void read_planets(){
 // Writes planets to file
 void write_planets(int timestep){
     char name[20];
-    int n = sprintf(name, "planets_out.txt");
+    int n = sprintf(name, "gpu_planets_out.txt");
 
     FILE* file = fopen(name, "wr+");
 
