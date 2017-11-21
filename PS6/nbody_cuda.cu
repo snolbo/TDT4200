@@ -34,7 +34,7 @@ void parse_args(int argc, char** argv){
 // Reads planets from planets.txt
 void read_planets(){
 
-    FILE* file = fopen("planets.txt", "r");
+    FILE* file = fopen("planets256.txt", "r");
     if(file == NULL){
         printf("'planets.txt' not found. Exiting\n");
         exit(-1);
