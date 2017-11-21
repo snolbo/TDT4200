@@ -80,7 +80,7 @@ void write_planets(int timestep, int output){
         int n = sprintf(name, "%04d.dat", timestep);
     }
     else{
-        int n = sprintf(name, "planets_out.txt");
+        int n = sprintf(name, "cpu_planets_out.txt");
     }
 
     FILE* file = fopen(name, "wr+");
