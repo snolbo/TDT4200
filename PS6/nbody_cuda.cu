@@ -1,12 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <sys/time.h>
 #include <cuda.h>
 #include <cuda_runtime.h>
 
 #define dT 0.2f
 #define G 0.6f
-#define BLOCK_SIZE 64
+#define BLOCK_SIZE 512
 
 // Global variables
 int num_planets;
@@ -19,6 +20,13 @@ float4* planets;
 // Device arrays
 float2* velocities_d;
 float4* planets_d;
+
+
+double walltime() {
+    static struct timeval t;
+    gettimeofday(&t, NULL);
+    return (t.tv_sec + 1e-6 * t.tv_usec);
+}
 
 
 // Parse command line arguments
@@ -34,7 +42,7 @@ void parse_args(int argc, char** argv){
 // Reads planets from planets.txt
 void read_planets(){
 
-  char* a;
+  //char* a;
   FILE* file = fopen("planets256.txt", "r");
   if(file == NULL){
       printf("'planets.txt' not found. Exiting\n");
@@ -42,14 +50,14 @@ void read_planets(){
   }
 
   char line[200];
-  a = fgets(line, 200, file);
+  fgets(line, 200, file);
   sscanf(line, "%d", &num_planets);
 
     planets = (float4*)malloc(sizeof(float4)*num_planets);
     velocities = (float2*)malloc(sizeof(float2)*num_planets);
 
     for(int p = 0; p < num_planets; p++){
-        a = fgets(line, 200, file);
+        fgets(line, 200, file);
         sscanf(line, "%f %f %f %f %f",
                 &planets[p].x,
                 &planets[p].y,
@@ -84,6 +92,7 @@ void write_planets(int timestep){
 __device__ float2 calculate_velocity_change_planet(float4 p, float4 q){
 
   float2 dist;
+  float2 dvel;
   dist.x = q.x - p.x;
   dist.y = q.y - p.y;
   if(dist.x == 0 && dist.y == 0){
@@ -92,15 +101,17 @@ __device__ float2 calculate_velocity_change_planet(float4 p, float4 q){
   }
   float abs_dist= sqrt(dist.x*dist.x + dist.y*dist.y);
   float dist_cubed = abs_dist*abs_dist*abs_dist;
-  float2 dv;
-  dv.x = dT*G*q.z/dist_cubed * dist.x;
-  dv.y = dT*G*q.z/dist_cubed * dist.y;
-  return dv;
+  // Calculate change in velocity
+  dvel.x = dT*G*q.z/dist_cubed * dist.x;
+  dvel.y = dT*G*q.z/dist_cubed * dist.y;
+  return dvel;
 }
 
 // TODO 5. Calculate the change in velocity for my_planet, caused by the interactions with a block of planets
 __device__ float2 calculate_velocity_change_block(float4 my_planet, float4* shared_planets){
-  float2 velocity = {0.0f,0.0f};
+  float2 velocity;
+  velocity.x = 0.0f;
+  velocity.y = 0.0f;
   for(int i = 0; i < blockDim.x; i++){
     float2 temp_vel = calculate_velocity_change_planet(my_planet, shared_planets[i]);
     velocity.x += temp_vel.x;
@@ -114,6 +125,7 @@ __global__ void update_velocities(float4* planets, float2* velocities, int num_p
 
   int thread_id = blockIdx.x * blockDim.x + threadIdx.x;
   float4 my_planet = planets[thread_id];
+  // Shared memory for this block
   __shared__ float4 shared_planets[BLOCK_SIZE];
 
   // Compute the velocity change for planets for one block at a time
@@ -121,7 +133,8 @@ __global__ void update_velocities(float4* planets, float2* velocities, int num_p
     shared_planets[threadIdx.x] = planets[i + threadIdx.x];
     __syncthreads();
     float2 tempv = calculate_velocity_change_block(my_planet, shared_planets);
-    velocities[thread_id].x += tempv.x; velocities[thread_id].y += tempv.y;
+    velocities[thread_id].x += tempv.x;
+    velocities[thread_id].y += tempv.y;
     __syncthreads();
   }
 }
@@ -139,6 +152,9 @@ int main(int argc, char** argv){
     parse_args(argc, argv);
     read_planets();
 
+
+
+
     // TODO 1. Allocate device memory, and transfer data to device
     cudaMalloc(&planets_d,    sizeof(float4)*num_planets);
     cudaMalloc(&velocities_d, sizeof(float2)*num_planets);
@@ -152,6 +168,7 @@ int main(int argc, char** argv){
     // Calculating the number of blocks
     int num_blocks = num_planets/BLOCK_SIZE + ((num_planets%BLOCK_SIZE == 0) ? 0 : 1);
 
+    double calculation_time = walltime();
     // Main loop
     for(int t = 0; t < num_timesteps; t++){
         // TODO 2. Call kernels
@@ -162,6 +179,11 @@ int main(int argc, char** argv){
         update_positions<<<num_blocks, BLOCK_SIZE>>>(planets_d, velocities_d,
                                                     num_planets);
     }
+    double end_time = walltime();
+    calculation_time = end_time - calculation_time;
+    printf("%7.7f ms\n", calculation_time);
+
+
 
     // TODO 3. Transfer data back to host
     cudaMemcpy(planets,     planets_d,    sizeof(float4)*num_planets,

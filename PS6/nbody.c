@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <sys/time.h>
+
 
 #define G  0.6 //Gravitational constant
 #define dT 0.2 //Length of timestep
@@ -27,6 +29,12 @@ int output;
 
 vec2* forces;
 planet* planets;
+
+double walltime() {
+    static struct timeval t;
+    gettimeofday(&t, NULL);
+    return (t.tv_sec + 1e-6 * t.tv_usec);
+}
 
 
 // Parse command line arguments
@@ -128,13 +136,16 @@ int main(int argc, char** argv){
     read_planets();
 
     forces = (vec2*)malloc(sizeof(vec2)*num_planets);
-
     // Main loop
+
+    double calculation_time = 0;
     for(int t = 0; t < num_timesteps; t++){
 
         if(output == 1){
             write_planets(t, 1);
         }
+
+        double start_time = walltime();
 
         // Clear forces
         for(int i = 0; i < num_planets; i++){
@@ -161,7 +172,13 @@ int main(int argc, char** argv){
             planets[p].position.x += dT * planets[p].velocity.x;
             planets[p].position.y += dT * planets[p].velocity.y;
         }
+        double end_time = walltime();
+        calculation_time += end_time - start_time;
     }
+    printf("%7.7f ms\n", calculation_time);
+
+
+
 
     if(output == 0){
         write_planets(num_timesteps,0);
