@@ -139,13 +139,15 @@ int main(int argc, char** argv){
     // Main loop
 
     double calculation_time = 0;
+    double memcopy_time = 0;
     for(int t = 0; t < num_timesteps; t++){
 
         if(output == 1){
             write_planets(t, 1);
         }
 
-        double start_time = walltime();
+        double calc_start = walltime();
+        double mem_start = walltime();
 
         // Clear forces
         for(int i = 0; i < num_planets; i++){
@@ -172,10 +174,15 @@ int main(int argc, char** argv){
             planets[p].position.x += dT * planets[p].velocity.x;
             planets[p].position.y += dT * planets[p].velocity.y;
         }
-        double end_time = walltime();
-        calculation_time += end_time - start_time;
+        double calc_end = walltime();
+        double mem_end = walltime();
+
+        calculation_time += calc_end - calc_start;
+        memcopy_time += mem_end - mem_start;
     }
     printf("%7.7f ms\n", calculation_time);
+    printf("%7.7f ms\n", memcopy_time);
+
 
 
 

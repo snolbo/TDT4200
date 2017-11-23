@@ -152,24 +152,31 @@ int main(int argc, char** argv){
     parse_args(argc, argv);
     read_planets();
 
+    double calculation_time = 0;
+    double memcopy_time = 0;
 
 
 
     // TODO 1. Allocate device memory, and transfer data to device
+
     cudaMalloc(&planets_d,    sizeof(float4)*num_planets);
     cudaMalloc(&velocities_d, sizeof(float2)*num_planets);
 
+    double mem_start = walltime();
     cudaMemcpy(planets_d,    planets,     sizeof(float4)*num_planets,
                                           cudaMemcpyHostToDevice);
     cudaMemcpy(velocities_d, velocities,  sizeof(float2)*num_planets,
                                           cudaMemcpyHostToDevice);
+    memcopy_time += walltime() - mem_start;
 
 
     // Calculating the number of blocks
     int num_blocks = num_planets/BLOCK_SIZE + ((num_planets%BLOCK_SIZE == 0) ? 0 : 1);
 
-    double calculation_time = walltime();
+
     // Main loop
+
+    double calc_start = walltime();
     for(int t = 0; t < num_timesteps; t++){
         // TODO 2. Call kernels
         //Update velocities
@@ -179,20 +186,26 @@ int main(int argc, char** argv){
         update_positions<<<num_blocks, BLOCK_SIZE>>>(planets_d, velocities_d,
                                                     num_planets);
     }
-    double end_time = walltime();
-    calculation_time = end_time - calculation_time;
-    printf("%7.7f ms\n", calculation_time);
+    calculation_time = walltime() - calc_start;
 
 
 
+    double mem_start = walltime();
     // TODO 3. Transfer data back to host
     cudaMemcpy(planets,     planets_d,    sizeof(float4)*num_planets,
                                           cudaMemcpyDeviceToHost);
     cudaMemcpy(velocities,  velocities_d, sizeof(float2)*num_planets,
                                           cudaMemcpyDeviceToHost);
+    memcopy_time += walltime() - mem_start;
+
 
     cudaFree(planets_d);
     cudaFree(velocities_d);
     // Output
     write_planets(num_timesteps);
+    printf("%7.7f ms\n", calculation_time);
+    printf("%7.7f ms\n", memcopy_time);
+
+
+
 }
