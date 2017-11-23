@@ -7,7 +7,7 @@
 
 #define dT 0.2f
 #define G 0.6f
-#define BLOCK_SIZE 512
+#define BLOCK_SIZE 128
 
 // Global variables
 int num_planets;
@@ -43,7 +43,7 @@ void parse_args(int argc, char** argv){
 void read_planets(){
 
   //char* a;
-  FILE* file = fopen("planets256.txt", "r");
+  FILE* file = fopen("planets4096.txt", "r");
   if(file == NULL){
       printf("'planets.txt' not found. Exiting\n");
       exit(-1);
@@ -154,8 +154,7 @@ int main(int argc, char** argv){
 
     double calculation_time = 0;
     double memcopy_time = 0;
-
-
+    printf("blocksize: %d\n", BLOCK_SIZE);
 
     // TODO 1. Allocate device memory, and transfer data to device
 
@@ -172,25 +171,26 @@ int main(int argc, char** argv){
 
     // Calculating the number of blocks
     int num_blocks = num_planets/BLOCK_SIZE + ((num_planets%BLOCK_SIZE == 0) ? 0 : 1);
-
-
+    printf("numblocks: %d\n", num_blocks);
     // Main loop
+    dim3 grid_size(num_blocks);
+    dim3 block_size(BLOCK_SIZE);
 
     double calc_start = walltime();
     for(int t = 0; t < num_timesteps; t++){
         // TODO 2. Call kernels
         //Update velocities
-        update_velocities<<<num_blocks, BLOCK_SIZE>>>(planets_d, velocities_d,
+        update_velocities<<<grid_size, block_size>>>(planets_d, velocities_d,
                                                       num_planets);
         //Update positions
-        update_positions<<<num_blocks, BLOCK_SIZE>>>(planets_d, velocities_d,
+        update_positions<<<grid_size, block_size>>>(planets_d, velocities_d,
                                                     num_planets);
     }
     calculation_time = walltime() - calc_start;
 
 
 
-    double mem_start = walltime();
+    mem_start = walltime();
     // TODO 3. Transfer data back to host
     cudaMemcpy(planets,     planets_d,    sizeof(float4)*num_planets,
                                           cudaMemcpyDeviceToHost);
@@ -198,14 +198,13 @@ int main(int argc, char** argv){
                                           cudaMemcpyDeviceToHost);
     memcopy_time += walltime() - mem_start;
 
+    printf("%7.7f\n", calculation_time);
+    printf("%7.7f\n", memcopy_time);
+
 
     cudaFree(planets_d);
     cudaFree(velocities_d);
     // Output
     write_planets(num_timesteps);
-    printf("%7.7f ms\n", calculation_time);
-    printf("%7.7f ms\n", memcopy_time);
-
-
 
 }

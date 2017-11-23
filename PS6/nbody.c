@@ -56,7 +56,7 @@ void parse_args(int argc, char** argv){
 void read_planets(){
 
     char* a;
-    FILE* file = fopen("planets256.txt", "r");
+    FILE* file = fopen("planets4096.txt", "r");
     if(file == NULL){
         printf("'planets.txt' not found. Exiting\n");
         exit(-1);
@@ -136,18 +136,15 @@ int main(int argc, char** argv){
     read_planets();
 
     forces = (vec2*)malloc(sizeof(vec2)*num_planets);
-    // Main loop
 
     double calculation_time = 0;
-    double memcopy_time = 0;
+    double calc_start = walltime();
+    // Main loop
     for(int t = 0; t < num_timesteps; t++){
 
         if(output == 1){
             write_planets(t, 1);
         }
-
-        double calc_start = walltime();
-        double mem_start = walltime();
 
         // Clear forces
         for(int i = 0; i < num_planets; i++){
@@ -174,18 +171,14 @@ int main(int argc, char** argv){
             planets[p].position.x += dT * planets[p].velocity.x;
             planets[p].position.y += dT * planets[p].velocity.y;
         }
-        double calc_end = walltime();
-        double mem_end = walltime();
 
-        calculation_time += calc_end - calc_start;
-        memcopy_time += mem_end - mem_start;
+        if(t % 100 == 0){
+          printf("%d of %d\n", t, num_timesteps);
+        }
+
     }
-    printf("%7.7f ms\n", calculation_time);
-    printf("%7.7f ms\n", memcopy_time);
-
-
-
-
+    calculation_time = walltime() - calc_start;
+    printf("%7.7f\n", calculation_time);
 
     if(output == 0){
         write_planets(num_timesteps,0);
